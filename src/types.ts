@@ -53,10 +53,18 @@ export interface LovelaceCardConfig {
   [key: string]: unknown;
 }
 
-export interface WindRoseCardConfig extends LovelaceCardConfig {
-  entity: string;
-  speed_entity?: string;
+export interface WindRoseConfig extends LovelaceCardConfig {
   title?: string;
-  max_speed?: number;
+  speed_entity: string;
+  gust_entity?: string;
+  direction_entity: string;
   hours_to_show?: number;
 }
+
+export interface WindData {
+  speed: number;
+  direction: number;
+  gust?: number;
+  timestamp: number;
+}
+

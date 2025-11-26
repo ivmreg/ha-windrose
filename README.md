@@ -6,14 +6,6 @@
 
 A custom Lovelace card for Home Assistant that displays wind direction and speed as a beautiful wind rose diagram.
 
-## Features
-
-- 🧭 Visual wind direction indicator with compass rose
-- 💨 Dynamic arrow length based on wind speed
-- 🎨 Customizable appearance using Home Assistant themes
-- ⚡ Real-time updates
-- 📱 Responsive design
-
 ## Installation
 
 ### HACS (Recommended)
@@ -43,41 +35,39 @@ A custom Lovelace card for Home Assistant that displays wind direction and speed
 | Name | Type | Required | Default | Description |
 |------|------|----------|---------|-------------|
 | `type` | string | **Yes** | - | Must be `custom:ha-windrose` |
-| `entity` | string | **Yes** | - | Wind direction sensor entity (in degrees or compass direction) |
-| `speed_entity` | string | No | - | Wind speed sensor entity |
-| `title` | string | No | `Wind Rose` | Card title |
-| `max_speed` | number | No | `50` | Maximum wind speed for scaling the arrow |
-| `hours_to_show` | number | No | `24` | Hours of history to display (future feature) |
+| `speed_entity` | string | **Yes** | - | Wind speed sensor entity (e.g., `sensor.wind_speed`) |
+| `direction_entity` | string | **Yes** | - | Wind direction sensor entity (degrees, e.g., `sensor.wind_direction`) |
+| `gust_entity` | string | No | - | Wind gust sensor entity (e.g., `sensor.wind_gust`) |
+| `title` | string | No | `Wind Conditions` | Card title |
+| `hours_to_show` | number | No | `4` | Hours of history to display (currently unused) |
 
 ### Example Configuration
 
 ```yaml
 type: custom:ha-windrose
-entity: sensor.wind_direction
+title: My Weather Station
 speed_entity: sensor.wind_speed
-title: Wind Rose
-max_speed: 100
-hours_to_show: 24
+direction_entity: sensor.wind_direction
+gust_entity: sensor.wind_gust
 ```
 
-### Minimal Configuration
+## Features
 
-```yaml
-type: custom:ha-windrose
-entity: sensor.wind_direction
-```
+- 🧭 **Wind Rose Chart**: Visualizes wind speed and direction using Chart.js.
+- 🌬️ **Beaufort Scale**: Automatically calculates and displays the Beaufort scale force and description based on wind speed.
+- 📊 **Statistics**: Displays current speed, direction, and gust values.
+- 🎨 **Visual Indicators**: Includes a color-coded Beaufort scale bar.
 
 ## Entity Requirements
 
 ### Wind Direction Entity
+The wind direction entity should provide a numeric value in degrees (0-360).
 
-The wind direction entity can provide values in:
-- **Degrees** (0-360): Numeric value representing wind direction in degrees
-- **Compass directions**: N, NNE, NE, ENE, E, ESE, SE, SSE, S, SSW, SW, WSW, W, WNW, NW, NNW
+### Wind Speed Entity
+The wind speed entity should provide a numeric value. The card currently assumes `mph` for Beaufort calculations but displays the unit from the sensor.
 
-### Wind Speed Entity (Optional)
-
-The wind speed entity should provide a numeric value. The unit of measurement will be displayed automatically.
+### Wind Gust Entity (Optional)
+The wind gust entity should provide a numeric value.
 
 ## Development
 
