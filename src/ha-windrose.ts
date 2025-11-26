@@ -24,6 +24,13 @@ window.customCards.push({
 
 // Direction labels for the wind rose
 const DIRECTIONS = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'] as const;
+
+// Arrow configuration constants
+const ARROW_MAX_LENGTH_RATIO = 0.9; // Maximum arrow length as ratio of radius
+const ARROW_MIN_LENGTH_RATIO = 0.3; // Minimum arrow length as ratio of radius
+const ARROW_SPEED_LENGTH_RATIO = 0.6; // Additional length based on speed
+const ARROW_HEAD_ANGLE_DEGREES = 25; // Arrow head angle in degrees
+
 const DIRECTION_DEGREES: Record<string, number> = {
   'N': 0,
   'NNE': 22.5,
@@ -185,8 +192,11 @@ export class HaWindrose extends LitElement {
     const speed = this._getWindSpeed();
     const maxSpeed = this._config.max_speed || 50;
     
-    // Calculate arrow length based on speed (minimum 30% of radius)
-    const arrowLength = Math.min(radius * 0.9, radius * (0.3 + (speed / maxSpeed) * 0.6));
+    // Calculate arrow length based on speed
+    const arrowLength = Math.min(
+      radius * ARROW_MAX_LENGTH_RATIO,
+      radius * (ARROW_MIN_LENGTH_RATIO + (speed / maxSpeed) * ARROW_SPEED_LENGTH_RATIO)
+    );
     
     // Arrow points from center in the direction the wind is coming FROM
     // (wind direction is typically reported as the direction wind is coming from)
@@ -197,7 +207,7 @@ export class HaWindrose extends LitElement {
     
     // Arrow head
     const headLength = 12;
-    const headAngle = 25 * (Math.PI / 180);
+    const headAngle = ARROW_HEAD_ANGLE_DEGREES * (Math.PI / 180);
     const head1X = tipX - headLength * Math.cos(angleRad - headAngle);
     const head1Y = tipY - headLength * Math.sin(angleRad - headAngle);
     const head2X = tipX - headLength * Math.cos(angleRad + headAngle);
